@@ -10,6 +10,14 @@ const app = express()
 app.use(Cors())
 app.use(express.json({ extended: true }))
 
+
+// ROUTES
+app.use('/api/',require('./routes/user.routes'))
+app.use('/api/',require('./routes/loginAndRegister/register.routes'))
+// ROUTES
+
+
+
 async function start() {
     try {
         await mongoose.connect(config.get('mongoUri'), {
