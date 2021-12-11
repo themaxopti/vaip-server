@@ -14,6 +14,7 @@ app.use(express.json({ extended: true }))
 // ROUTES
 app.use('/api/',require('./routes/user.routes'))
 app.use('/api/',require('./routes/loginAndRegister/register.routes'))
+app.use('/api/',require('./routes/loginAndRegister/login.routes'))
 // ROUTES
 
 
