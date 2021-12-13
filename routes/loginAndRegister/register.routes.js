@@ -16,4 +16,6 @@ router.post(
     registerController.register
 )
 
+router.get('/activate/:link?',registerController.activateLink)
+
 module.exports = router

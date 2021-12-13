@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt')
 const { validationResult } = require('express-validator')
 const User = require('../../models/User')
+const uuid = require('uuid')
+const config = require('config')
+
+const MailService = require('../../services/mailSevec/mailServece')
 
 
 exports.register = async (req, res) => {
@@ -8,7 +12,6 @@ exports.register = async (req, res) => {
         res.header('Access-Control-Allow-Origin', "*")
         res.header('Access-Control-Allow-Headers', "Origin, X-Requested-With, Content-Type, Accept")
 
-        console.log(req.body)
         const errors = validationResult(req)
 
         if (!errors.isEmpty()) {
@@ -37,11 +40,14 @@ exports.register = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12)
-        console.log(hashedPassword)
+        const secretLink = uuid.v4()
 
-        const user = new User({ name, password: hashedPassword, email })
+        const mailService = new MailService()
+
+        const user = new User({ name, password: hashedPassword, email, activatedLink: secretLink })
         await user.save()
 
+        await mailService.sendEmail(email, `${config.get('API_URL')}/api/activate/${secretLink}`)
 
         res.status(201).json({
             message: "Пользователь создан"
@@ -50,5 +56,27 @@ exports.register = async (req, res) => {
 
     } catch (e) {
         console.log(e)
+    }
+}
+
+exports.activateLink = async (req, res) => {
+    try {
+        const link = req.params.link
+        const user = await User.findOne({ activatedLink: link })
+
+        if (!user) {
+            return res.json({
+                message: 'Пользователь не найден'
+            })
+        }
+
+        user.isActivated = true
+        await user.save()
+
+
+        res.redirect(config.get('CLIENT_URL'))
+
+    } catch (e) {
+
     }
 }

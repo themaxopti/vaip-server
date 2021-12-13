@@ -15,8 +15,11 @@ app.use(express.json({ extended: true }))
 app.use('/api/',require('./routes/user.routes'))
 app.use('/api/',require('./routes/loginAndRegister/register.routes'))
 app.use('/api/',require('./routes/loginAndRegister/login.routes'))
+app.use('/api/',require('./routes/products/products.routes'))
 // ROUTES
 
+
+app.use(express.static(__dirname + "/static"));
 
 
 async function start() {
