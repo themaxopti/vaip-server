@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt-nodejs')
 const { validationResult } = require('express-validator')
 const User = require('../../models/User')
 const uuid = require('uuid')
