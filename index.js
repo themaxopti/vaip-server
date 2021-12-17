@@ -10,6 +10,8 @@ const app = express()
 app.use(Cors())
 app.use(express.json({ extended: true }))
 
+const filePathMiddleware = require('./middleware/filePath.middleware')
+app.use(filePathMiddleware(path.resolve(__dirname,'files')))
 
 // ROUTES
 app.use('/api/',require('./routes/user.routes'))
