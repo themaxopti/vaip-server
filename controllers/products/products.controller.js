@@ -1,52 +1,34 @@
-const bcrypt = require('bcrypt')
-const { validationResult } = require('express-validator')
-const User = require('../../models/User')
-const jwt = require('jsonwebtoken')
-const config = require('config')
-const FileService = require('../../services/fileServices/fileService')
-const Vape = require('../../models/Categories/Vape')
-const Categories = require('../../models/Categories/Categoriess')
+const Iqos = require('../../models/production/Iqos.production')
+const Vape = require('../../models/production/Vape')
+const LilSolid = require('../../models/production/LilSolid')
+const Embalishment = require('../../models/production/Embalishment')
+const Stick = require('../../models/production/Stick')
 
 
-exports.addVapeProduct = async (req, res) => {
+
+exports.addIqos = async (req, res) => {
     try {
-        // const file = req.files.product
-
-        // const fileService = new FileService()
-
-        // const image = await fileService.uploadAvatar(file)
-        console.log('===========')
-
-        const {
-            description, title, value,
-            type,
-            typeOfAutomizer,
-            valueOfNikotin,
-            valueOfAccamulator,
-            color,
-            htmlColor,
-            weight } = req.body
 
 
-        const vape = new Vape({
-            description,
-            title,
-            value,
-            type,
-            typeOfAutomizer,
-            valueOfNikotin,
-            valueOfAccamulator,
-            color,
-            htmlColor,
-            weight
-        })
+        const iqos = await Iqos.find()
+
+        res.json(iqos)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+// Vape
 
 
+exports.addVape = async (req, res) => {
+    try {
+
+        const vape = new Vape({ test: 'ddd' })
         await vape.save()
 
-        const categories = await Categories.findOneAndUpdate({ _id: "61b63729144b7ffb7c5ba872" }, { $push: { vape: vape._id } }, { new: true })
-
-        res.json(categories)
+        res.json(vape)
 
     } catch (e) {
         console.log(e)
@@ -54,18 +36,159 @@ exports.addVapeProduct = async (req, res) => {
 }
 
 
-exports.addPhotoVape = async (req, res) => {
+
+exports.allVape = async (req, res) => {
     try {
-        const file = req.files.product
 
-
-        const fileService = new FileService()
-
-        const image = await fileService.uploadAvatar(file)
-
-        const vape = await Vape.findOneAndUpdate({ title: "Balmy 500" }, { $push: { photos: image } }, { new: true })
+        const vape = await Vape.find()
 
         res.json(vape)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+// LIL SOLID
+
+
+exports.addLilSolid = async (req, res) => {
+    try {
+
+        const lilSolid = new LilSolid({ test: 'ddd' })
+        await lilSolid.save()
+
+        res.json(lilSolid)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+exports.allLilSolid = async (req, res) => {
+    try {
+
+        const lilSolid = await LilSolid.find()
+
+        res.json(lilSolid)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+// Embalishment
+
+exports.addEmbalishment = async (req, res) => {
+    try {
+
+        const embalishment = new Embalishment({ test: 'ddd' })
+        await embalishment.save()
+
+        res.json(embalishment)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+exports.allEmbalishment = async (req, res) => {
+    try {
+
+        const embalishment = await Embalishment.find()
+
+        res.json(embalishment)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+// Embalishment
+
+
+
+
+
+// Sticks
+
+exports.addSticks = async (req, res) => {
+    try {
+
+        const stick = new Stick({ test: 'ddd' })
+        await stick.save()
+
+        res.json(stick)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+exports.allSticks = async (req, res) => {
+    try {
+
+        const stick = await Stick.find()
+
+        res.json(stick)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+
+exports.randomProduct = async (req, res) => {
+    try {
+
+        const stick = await Stick.aggregate([{ $sample: { size: 2 } }])
+        const vape = await Vape.aggregate([{ $sample: { size: 2 } }])
+        const iqos = await Iqos.aggregate([{ $sample: { size: 2 } }])
+        const lilSolid = await LilSolid.aggregate([{ $sample: { size: 2 } }])
+
+        const products = [...vape, ...stick, ...iqos, ...lilSolid]
+
+        res.json(products)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+
+exports.getOneProduct = async (req, res) => {
+    try {
+
+        const id = req.params.id
+
+        const stick = await Stick.findOne({ _id: id })
+        const vape = await Vape.findOne({ _id: id })
+        const iqos = await Iqos.findOne({ _id: id })
+        const lilSolid = await LilSolid.findOne({ _id: id })
+
+        if (stick) return res.json(stick)
+        if (vape) return res.json(vape)
+        if (iqos) return res.json(iqos)
+        if (lilSolid) return res.json(lilSolid)
+
+
+
+        res.json({message:"Такого товара не найдено"})
+
+
     } catch (e) {
         console.log(e)
     }

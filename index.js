@@ -16,6 +16,7 @@ app.use('/api/',require('./routes/user.routes'))
 app.use('/api/',require('./routes/loginAndRegister/register.routes'))
 app.use('/api/',require('./routes/loginAndRegister/login.routes'))
 app.use('/api/',require('./routes/products/products.routes'))
+app.use('/api/',require('./routes/pannier/pannier.routes'))
 // ROUTES
 
 

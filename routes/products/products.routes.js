@@ -3,8 +3,48 @@ const productController = require('../../controllers/products/products.controlle
 
 const router = Router()
 
-router.post('/addProduct/vape', productController.addVapeProduct)
-router.post('/addProduct/vape/addphoto', productController.addPhotoVape)
+
+// iqos
+router.get('/iqos/addIqos', productController.addIqos)
+router.get('/iqos/all', productController.addIqos)
+// iqos
+
+// Vape
+router.get('/vape/addVape', productController.addVape)
+router.get('/vape/all', productController.allVape)
+// Vape
+
+
+
+// Lil solid
+router.get('/lilSolid/addLilSolid', productController.addLilSolid)
+router.get('/lilSolid/all', productController.allLilSolid)
+// Lil solid
+
+
+
+// Embalishment
+router.get('/embalishment/addEmbalishment', productController.addEmbalishment)
+router.get('/embalishment/all', productController.allEmbalishment)
+// Embalishment
+
+
+
+// Sticks
+router.get('/sticks/addSticks', productController.addSticks)
+router.get('/sticks/all', productController.allSticks)
+// Sticks
+
+
+// Random items
+router.get('/products/random', productController.randomProduct)
+// Random items
+
+
+router.get('/products/:id', productController.getOneProduct)
+
+
+
 
 // router.post('/avatar',)
 

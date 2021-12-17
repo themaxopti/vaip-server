@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const loginController = require('../../controllers/loginAndRegisterControllers/login.controller')
 const authMiddleware = require('../../middleware/auth.middleware')
 const { check } = require('express-validator')
-
+    
 router.post(
     '/login',
     [

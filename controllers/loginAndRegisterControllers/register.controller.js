@@ -4,7 +4,9 @@ const User = require('../../models/User')
 const uuid = require('uuid')
 const config = require('config')
 
+
 const MailService = require('../../services/mailSevec/mailServece')
+const Panier = require('../../models/Pannier/Panier')
 
 
 exports.register = async (req, res) => {
@@ -49,6 +51,14 @@ exports.register = async (req, res) => {
 
         await mailService.sendEmail(email, `${config.get('API_URL')}/api/activate/${secretLink}`)
 
+
+        const panier = new Panier({
+            userId: user._id,
+            userName:user.name
+        })
+
+        await panier.save()
+
         res.status(201).json({
             message: "Пользователь создан"
         })
@@ -72,6 +82,7 @@ exports.activateLink = async (req, res) => {
 
         user.isActivated = true
         await user.save()
+
 
 
         res.redirect(config.get('CLIENT_URL'))
